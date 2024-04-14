@@ -99,28 +99,28 @@ def monitor_process(script_cmd, log_file, interval=1, suppress_local=False):
                     new_connections = current_connections - existing_connections
                     for laddr, raddr, status in new_connections:
                         if status == 'LISTEN':
-                            open_ports.append(laddr.port)
+                            open_ports.append(f"{laddr.port}")
                             log.write(f"Detected new local open port: {laddr.port}" + "\n")
-                            
-                        local_hostname, local_ipv4_addr, local_port_number = get_hostname_and_ipv4(laddr)
-                        local_infos = f"{local_hostname} ({local_ipv4_addr}):{local_port_number}"
-                        remote_hostname, remote_ipv4_addr, remote_port_number = get_hostname_and_ipv4(raddr)
-                        remote_infos = f"{remote_hostname} ({remote_ipv4_addr}):{remote_port_number}"
-                        # Determine the connection initiator
-                        if len(raddr)>0 and laddr == raddr[0]:
-                            initiator = "local"
-                        elif len(raddr)>0:
-                            initiator = "remote"  
                         else:
-                            initiator = "unknown"  
-                        # Skip logging for local to local connections if suppress_local is True
-                        if suppress_local and remote_ipv4_addr == local_ipv4_addr:
-                            continue                                             
-                        # Get the connection status
-                        timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                        log_entry = f"{timestamp}: initiator: {initiator}, status: {get_conn_status_str(status)}, local: {local_infos}, remote: {remote_infos}"
-                        ASCIIColors.red(log_entry)
-                        log.write(log_entry + "\n")
+                            local_hostname, local_ipv4_addr, local_port_number = get_hostname_and_ipv4(laddr)
+                            local_infos = f"{local_hostname} ({local_ipv4_addr}):{local_port_number}"
+                            remote_hostname, remote_ipv4_addr, remote_port_number = get_hostname_and_ipv4(raddr)
+                            remote_infos = f"{remote_hostname} ({remote_ipv4_addr}):{remote_port_number}"
+                            # Determine the connection initiator
+                            if len(raddr)>0 and laddr == raddr[0]:
+                                initiator = "local"
+                            elif len(raddr)>0:
+                                initiator = "remote"  
+                            else:
+                                initiator = "unknown"  
+                            # Skip logging for local to local connections if suppress_local is True
+                            if suppress_local and remote_ipv4_addr == local_ipv4_addr:
+                                continue                                             
+                            # Get the connection status
+                            timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                            log_entry = f"{timestamp}: initiator: {initiator}, status: {get_conn_status_str(status)}, local: {local_infos}, remote: {remote_infos}"
+                            ASCIIColors.red(log_entry)
+                            log.write(log_entry + "\n")
                         log.flush()
 
                     # Update the set of existing connections
