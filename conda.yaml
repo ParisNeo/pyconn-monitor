@@ -1,0 +1,10 @@
+# conda.yaml
+name: pyconn-monitor
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - psutil
+  - pip
+  - pip:
+    - ascii_colors
