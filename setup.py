@@ -3,9 +3,12 @@ from setuptools import setup, find_packages
 with open('README.md', 'r') as f:
     long_description = f.read()
 
+with open('requirements.txt', 'r') as f:
+    install_requires = f.read().splitlines()
+
 setup(
     name='pyconn-monitor',
-    version='0.1.0',
+    version='0.1.1',
     author='ParisNeo',
     author_email='parisneoai@gmail.com',
     description='A Python library to monitor and log network connections of untrusted programs',
@@ -13,9 +16,7 @@ setup(
     long_description_content_type='text/markdown',
     url='https://github.com/ParisNeo/pyconn-monitor',
     packages=find_packages(),
-    install_requires=[
-        'psutil',
-    ],
+    install_requires=install_requires,
     entry_points={
         'console_scripts': [
             'pyconn-monitor=pyconn_monitor.cli:main',
