@@ -1,2 +1,2 @@
 psutil
-ascii_colors
+ascii-colors
