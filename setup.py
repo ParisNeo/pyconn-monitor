@@ -8,7 +8,7 @@ with open('requirements.txt', 'r') as f:
 
 setup(
     name='pyconn-monitor',
-    version='0.1.1',
+    version='0.1.3',
     author='ParisNeo',
     author_email='parisneoai@gmail.com',
     description='A Python library to monitor and log network connections of untrusted programs',

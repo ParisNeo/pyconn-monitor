@@ -85,7 +85,7 @@ def monitor_process(script_cmd, log_file, interval=1, suppress_local=False):
 
     print("Starting to monitor new network connections...")
     existing_connections = set()
-
+    open_ports = []
     with open(log_file, "a", encoding="utf-8") as log:
         log.write(f"Connections test log file\n")
         log.write(f"Testing program {process.cmdline()} with pid: {process.pid}\n" )
@@ -98,6 +98,10 @@ def monitor_process(script_cmd, log_file, interval=1, suppress_local=False):
                     # Log new connections
                     new_connections = current_connections - existing_connections
                     for laddr, raddr, status in new_connections:
+                        if status == 'LISTEN':
+                            open_ports.append(laddr.port)
+                            log.write(f"Detected new local open port: {laddr.port}" + "\n")
+                            
                         local_hostname, local_ipv4_addr, local_port_number = get_hostname_and_ipv4(laddr)
                         local_infos = f"{local_hostname} ({local_ipv4_addr}):{local_port_number}"
                         remote_hostname, remote_ipv4_addr, remote_port_number = get_hostname_and_ipv4(raddr)
@@ -124,6 +128,9 @@ def monitor_process(script_cmd, log_file, interval=1, suppress_local=False):
 
             except (psutil.NoSuchProcess, psutil.AccessDenied):
                 print(f"Process with pid {pid} has terminated or cannot be accessed.")
+                log.write("Terminated:\n")
+                log.write("List of opened ports:\n")
+                log.write("\n".join(open_ports))               
                 break
 
         time.sleep(interval)
